@@ -4,7 +4,7 @@
         <script src="https://js.jotform.com/JotFormCustomWidget.min.js"></script>
 		<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 		<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
-		<script src="https://github.com/edwards2019inc/jotform-json-widget/jsonpath-0.8.0.js"></script>
+		<script src="https://edwards2019inc.github.io/jotform-json-widget/jsonpath-0.8.0.js"></script>
 		<style> 
 			#div.status_msg{
 				background:#CCCCCC;
@@ -14,31 +14,50 @@
     <body>
         <div id="main">
 			<div id="statusBar"></div>
-            <h3>JSON Parser</h3>
+            <h3>JSONPath Widget</h3>
 			<span id="json_input_label">Input</span>
-			<input type="text" id="json_input" value="{}"><br>
+			<input type="text" id="json_input" value='{"nums":[1,2,3,4,5]}'><br>
+			<span id="json_input_label">JSONPath Expression</span>
+			<input type="text" id="jsonp_expr" value=""><br>
+			<input type="submit" id="test_jsonpath" onclick="onPopulate()" value="Test"><br>
         </div>
         <script type="text/javascript">
-			jsonPathExpr = "";
+			jsonPathExpr = "$.nums[3]";
+			multiResAction="first";
+			multiResJoin="first";
+			function onPopulate(){
+				jsonPathExpr = $("#jsonp_expr").val();
+				let json_str = $("#json_input").val();
+				console.log(json_str);
+				let json_input = JSON.parse(json_str);
+				let result_array = jsonPath(json_input,jsonPathExpr);
+				let result_str_array = [];
+				for(var i in result_array){
+					result_str_array.push(JSON.stringify(result_array[i]));
+				}
+				let result = result_str_array.join(',');
+				console.log(result);
+				JFCustomWidget.sendData({valid:true,value:result});
+			}
             //always subscribe to ready event and implement widget related code
             //inside callback function , it is the best practice while developing widgets
             JFCustomWidget.subscribe("ready", function(formid, value){
 				console.log("ready: " + JSON.stringify(formid) + ", " + JSON.stringify(value));
-				var jsonPathExpr = JFCustomWidget.getWidgetSetting('JSONPathExpression');
+				$("#jsonp_expr").val(JFCustomWidget.getWidgetSetting('JSONPathExpression'));
+				
                 //subscribe to form submit event
                 JFCustomWidget.subscribe("submit", function(){
                 });
 				JFCustomWidget.subscribe('populate', function(data){
 					//logStatusMessage("populate: " + JSON.stringify(data));
 					console.log("populate: " + JSON.stringify(data));
-					$("#json_input").val(data.value);
+					$("#json_input").val(JSON.stringify(data.value));
 					let json_input = JSON.parse(data.value);
-					let result = jsonPath(json_input,jsonPathExpr);
-					JFCustomWidget.sendData({valid:true,value:);
+					onPopulate();
 				});
             });
 			$(document).ready(function(){
-				initMaps();
+
 			});
         </script>
     </body>
