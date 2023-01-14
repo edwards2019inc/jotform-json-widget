@@ -50,8 +50,8 @@
                 });
 				JFCustomWidget.subscribe('populate', function(data){
 					//logStatusMessage("populate: " + JSON.stringify(data));
-					console.log("populate: " + JSON.stringify(data));
-					$("#json_input").val(JSON.stringify(data.value));
+					console.log("populate: " + data);
+					$("#json_input").val(data.value);
 					let json_input = JSON.parse(data.value);
 					onPopulate();
 				});
