@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://js.jotform.com/JotFormCustomWidget.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+		<script src="https://github.com/edwards2019inc/jotform-json-widget/jsonpath-0.8.0.js"></script>
+		<style> 
+			#div.status_msg{
+				background:#CCCCCC;
+			}
+		</style>
+    </head>
+    <body>
+        <div id="main">
+			<div id="statusBar"></div>
+            <h3>JSON Parser</h3>
+			<span id="json_input_label">Input</span>
+			<input type="text" id="json_input" value="{}"><br>
+        </div>
+        <script type="text/javascript">
+			jsonPathExpr = "";
+            //always subscribe to ready event and implement widget related code
+            //inside callback function , it is the best practice while developing widgets
+            JFCustomWidget.subscribe("ready", function(formid, value){
+				console.log("ready: " + JSON.stringify(formid) + ", " + JSON.stringify(value));
+				var jsonPathExpr = JFCustomWidget.getWidgetSetting('JSONPathExpression');
+                //subscribe to form submit event
+                JFCustomWidget.subscribe("submit", function(){
+                });
+				JFCustomWidget.subscribe('populate', function(data){
+					//logStatusMessage("populate: " + JSON.stringify(data));
+					console.log("populate: " + JSON.stringify(data));
+					$("#json_input").val(data.value);
+					let json_input = JSON.parse(data.value);
+					let result = jsonPath(json_input,jsonPathExpr);
+					JFCustomWidget.sendData({valid:true,value:);
+				});
+            });
+			$(document).ready(function(){
+				initMaps();
+			});
+        </script>
+    </body>
+</html>
