@@ -19,7 +19,7 @@
 			<input type="text" id="json_input" value='{"nums":[1,2,3,4,5]}'><br>
 			<span id="json_input_label">JSONPath Expression</span>
 			<input type="text" id="jsonp_expr" value=""><br>
-			<input type="submit" id="test_jsonpath" onclick="onPopulate()" value="Test"><br>
+			<input type="submit" id="eval_jsonpath" onclick="onPopulate()" value="Evaluate"><br>
         </div>
         <script type="text/javascript">
 			jsonPathExpr = "$.nums[3]";
@@ -44,6 +44,7 @@
             JFCustomWidget.subscribe("ready", function(formid, value){
 				console.log("ready: " + JSON.stringify(formid) + ", " + JSON.stringify(value));
 				$("#jsonp_expr").val(JFCustomWidget.getWidgetSetting('JSONPathExpression'));
+				$("#eval_jsonpath").val("Evaluate");
 				
                 //subscribe to form submit event
                 JFCustomWidget.subscribe("submit", function(){
@@ -53,6 +54,7 @@
 					console.log("populate: " + JSON.stringify(data));
 					$("#json_input").val(data.value);
 					let json_input = JSON.parse(data.value);
+					$("#eval_jsonpath").val("Evaluate");
 					onPopulate();
 				});
             });
