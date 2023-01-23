@@ -54,6 +54,7 @@
 					console.log("populate: " + JSON.stringify(data));
 					$("#json_input").val(data.value);
 					let json_input = JSON.parse(data.value);
+					$("#jsonp_expr").val(JFCustomWidget.getWidgetSetting('JSONPathExpression'));
 					$("#eval_jsonpath").val("Evaluate");
 					onPopulate();
 				});
