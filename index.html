@@ -53,6 +53,7 @@
 						value:resultData
                     };
                     // send value to JotForm
+					console.log("sendSubmit in jsonpath widget");
                     JFCustomWidget.sendSubmit(msg);
                 });
 				JFCustomWidget.subscribe('populate', function(data){
