@@ -42,10 +42,14 @@
 				let json_input = JSON.parse(json_str);
 				let result_array = jsonPath(json_input,jsonPathExpr);
 				let result_str_array = [];
-				for(var i in result_array){
-					result_str_array.push(JSON.stringify(result_array[i]));
+				if(result_array.length == 1){
+					resultData = result_array[0];
+				} else{
+					for(var i in result_array){
+						result_str_array.push(JSON.stringify(result_array[i]));
+					}
+					resultData = result_str_array.join(',');
 				}
-				resultData = result_str_array.join(',');
 				console.log(resultData);
 				JFCustomWidget.sendData({valid:true,value:resultData});
 			}
