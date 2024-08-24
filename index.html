@@ -74,9 +74,13 @@
 					//logStatusMessage("populate: " + JSON.stringify(data));
 					console.log("populate: " + JSON.stringify(data));
 					$("#json_input").val(data.value);
-					let json_input = JSON.parse(data.value);
-					$("#jsonp_expr").val(JFCustomWidget.getWidgetSetting('JSONPathExpression'));
-					onPopulate();
+					try{
+						let json_input = JSON.parse(data.value);
+						$("#jsonp_expr").val(JFCustomWidget.getWidgetSetting('JSONPathExpression'));
+						onPopulate();
+					} catch(e){
+						console.log("Error parsing josn data " + data.value + " : " + e.message);
+					}
 				});
             });
 			$(document).ready(function(){
