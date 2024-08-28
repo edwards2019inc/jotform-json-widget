@@ -62,7 +62,7 @@
 		JFCustomWidget.subscribe("ready", function (initData) {
 			console.log("ready: " + JSON.stringify(initData));
 			if(!initData.isEditMode){
-				$("jsonpath_main").css("display","none");
+				$("#jsonpath_main").css("display","none");
 			}
 			$("#jsonp_expr").val(JFCustomWidget.getWidgetSetting('JSONPathExpression'));
 
