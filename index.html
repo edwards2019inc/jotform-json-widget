@@ -1,91 +1,98 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <script src="https://js.jotform.com/JotFormCustomWidget.min.js"></script>
-		<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
-		<script src="https://edwards2019inc.github.io/jotform-json-widget/jsonpath-0.8.0.js"></script>
-		<style> 
-			#div.status_msg{
-				background:#CCCCCC;
-			}
-			div.button{
-				padding:10px;
-				border:2px solid black;
-				cursor:pointer;
-				max-width:150px;
-				text-align:center;
-				
-			}
-		</style>
-    </head>
-    <body>
-        <div id="main">
-			<div id="statusBar"></div>
-            <h3>JSONPath Widget</h3>
-			<span id="json_input_label">Input</span>
-			<input type="text" id="json_input" value='{"nums":[1,2,3,4,5]}'><br>
-			<span id="json_input_label">JSONPath Expression</span>
-			<input type="text" id="jsonp_expr" value=""><br>
-			<div class="button" id="calc_ride" onclick="onPopulate();">
-				<span style="font-weight:bold;font-size:18px;">Evaluate</span>
-			</div>
-        </div>
-        <script type="text/javascript">
-			jsonPathExpr = "$.nums[3]";
-			multiResAction="first";
-			multiResJoin="first";
-			resultData = "";
-			function onPopulate(){
-				jsonPathExpr = $("#jsonp_expr").val();
-				let json_str = $("#json_input").val();
-				console.log(json_str);
-				let json_input = JSON.parse(json_str);
-				let result_array = jsonPath(json_input,jsonPathExpr);
-				let result_str_array = [];
-				if(result_array.length == 1){
-					resultData = result_array[0];
-				} else{
-					for(var i in result_array){
-						result_str_array.push(JSON.stringify(result_array[i]));
-					}
-					resultData = result_str_array.join(',');
-				}
-				console.log("jsonpath sending results data:");
-				console.log(resultData);
-				JFCustomWidget.sendData({valid:true,value:resultData});
-			}
-            //always subscribe to ready event and implement widget related code
-            //inside callback function , it is the best practice while developing widgets
-            JFCustomWidget.subscribe("ready", function(formid, value){
-				console.log("ready: " + JSON.stringify(formid) + ", " + JSON.stringify(value));
-				$("#jsonp_expr").val(JFCustomWidget.getWidgetSetting('JSONPathExpression'));
-				
-                //subscribe to form submit event
-                JFCustomWidget.subscribe("submit", function(){
-					var msg = {
-                        valid: true,
-						value:resultData
-                    };
-                    // send value to JotForm
-					console.log("sendSubmit in jsonpath widget");
-                    JFCustomWidget.sendSubmit(msg);
-                });
-				JFCustomWidget.subscribe('populate', function(data){
-					//logStatusMessage("populate: " + JSON.stringify(data));
-					console.log("populate: " + JSON.stringify(data));
-					$("#json_input").val(data.value);
-					try{
-						let json_input = JSON.parse(data.value);
-						$("#jsonp_expr").val(JFCustomWidget.getWidgetSetting('JSONPathExpression'));
-						onPopulate();
-					} catch(e){
-						console.log("Error parsing josn data " + data.value + " : " + e.message);
-					}
-				});
-            });
-			$(document).ready(function(){
 
+<head>
+	<script src="https://js.jotform.com/JotFormCustomWidget.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+	<script src="https://edwards2019inc.github.io/jotform-json-widget/jsonpath-0.8.0.js"></script>
+	<style>
+		#div.status_msg {
+			background: #CCCCCC;
+		}
+
+		div.button {
+			padding: 10px;
+			border: 2px solid black;
+			cursor: pointer;
+			max-width: 150px;
+			text-align: center;
+
+		}
+	</style>
+</head>
+
+<body>
+	<div id="jsonpath_main">
+		<div id="statusBar"></div>
+		<h3>JSONPath Widget</h3>
+		<span id="json_input_label">Input</span>
+		<input type="text" id="json_input" value='{"nums":[1,2,3,4,5]}'><br>
+		<span id="json_input_label">JSONPath Expression</span>
+		<input type="text" id="jsonp_expr" value=""><br>
+		<div class="button" id="calc_ride" onclick="onPopulate();">
+			<span style="font-weight:bold;font-size:18px;">Evaluate</span>
+		</div>
+	</div>
+	<script type="text/javascript">
+		jsonPathExpr = "$.nums[3]";
+		multiResAction = "first";
+		multiResJoin = "first";
+		resultData = "";
+		function onPopulate() {
+			jsonPathExpr = $("#jsonp_expr").val();
+			let json_str = $("#json_input").val();
+			console.log(json_str);
+			let json_input = JSON.parse(json_str);
+			let result_array = jsonPath(json_input, jsonPathExpr);
+			let result_str_array = [];
+			if (result_array.length == 1) {
+				resultData = result_array[0];
+			} else {
+				for (var i in result_array) {
+					result_str_array.push(JSON.stringify(result_array[i]));
+				}
+				resultData = result_str_array.join(',');
+			}
+			console.log("jsonpath sending results data:");
+			console.log(resultData);
+			JFCustomWidget.sendData({ valid: true, value: resultData });
+		}
+		//always subscribe to ready event and implement widget related code
+		//inside callback function , it is the best practice while developing widgets
+		JFCustomWidget.subscribe("ready", function (initData) {
+			console.log("ready: " + JSON.stringify(initData));
+			if(!initData.isEditMode){
+				$("jsonpath_main").css("display","none");
+			}
+			$("#jsonp_expr").val(JFCustomWidget.getWidgetSetting('JSONPathExpression'));
+
+			//subscribe to form submit event
+			JFCustomWidget.subscribe("submit", function () {
+				var msg = {
+					valid: true,
+					value: resultData
+				};
+				// send value to JotForm
+				console.log("sendSubmit in jsonpath widget");
+				JFCustomWidget.sendSubmit(msg);
 			});
-        </script>
-    </body>
+			JFCustomWidget.subscribe('populate', function (data) {
+				//logStatusMessage("populate: " + JSON.stringify(data));
+				console.log("populate: " + JSON.stringify(data));
+				$("#json_input").val(data.value);
+				try {
+					let json_input = JSON.parse(data.value);
+					$("#jsonp_expr").val(JFCustomWidget.getWidgetSetting('JSONPathExpression'));
+					onPopulate();
+				} catch (e) {
+					console.log("Error parsing josn data " + data.value + " : " + e.message);
+				}
+			});
+		});
+		$(document).ready(function () {
+
+		});
+	</script>
+</body>
+
 </html>
