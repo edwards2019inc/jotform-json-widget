@@ -61,7 +61,7 @@
 		//inside callback function , it is the best practice while developing widgets
 		JFCustomWidget.subscribe("ready", function (initData) {
 			console.log("ready: " + JSON.stringify(initData));
-			if(!initData.isEditMode){
+			if(!initData.isApp || initData.isApp != "form-builder"){
 				console.log("Hiding edit mode elements")
 				$("#jsonpath_main").css("display","none");
 			}
