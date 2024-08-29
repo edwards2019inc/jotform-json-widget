@@ -62,6 +62,7 @@
 		JFCustomWidget.subscribe("ready", function (initData) {
 			console.log("ready: " + JSON.stringify(initData));
 			if(!initData.isEditMode){
+				console.log("Hiding edit mode elements")
 				$("#jsonpath_main").css("display","none");
 			}
 			$("#jsonp_expr").val(JFCustomWidget.getWidgetSetting('JSONPathExpression'));
