@@ -34,6 +34,7 @@
 		</div>
 	</div>
 	<script type="text/javascript">
+		qid=0;
 		jsonPathExpr = "$.nums[3]";
 		multiResAction = "first";
 		multiResJoin = "first";
@@ -61,9 +62,15 @@
 		//inside callback function , it is the best practice while developing widgets
 		JFCustomWidget.subscribe("ready", function (initData) {
 			console.log("ready: " + JSON.stringify(initData));
+			qid = initData.qid;
 			if(!initData.isApp || initData.isApp != "form-builder"){
 				console.log("Hiding edit mode elements")
 				$("#jsonpath_main").css("display","none");
+				// if we are in an iframe try to hide that too
+				if(window.parent){
+					window.parent.document.getElementById("cid_"+qid).sylte.width = "0px";
+					window.parent.document.getElementById("cid_"+qid).sylte.height = "0px";
+				}
 			}
 			$("#jsonp_expr").val(JFCustomWidget.getWidgetSetting('JSONPathExpression'));
 
