@@ -68,8 +68,11 @@
 				$("#jsonpath_main").css("display","none");
 				// if we are in an iframe try to hide that too
 				if(window.parent){
-					window.parent.document.getElementById("cid_"+qid).sylte.width = "0px";
-					window.parent.document.getElementById("cid_"+qid).sylte.height = "0px";
+					ele = window.parent.document.getElementById("id_"+qid);
+					ele.sylte.width = "0px";
+					ele.sylte.height = "0px";
+					ele.sylte.padding = "0px";
+					ele.sylte.margin = "0px";
 				}
 			}
 			$("#jsonp_expr").val(JFCustomWidget.getWidgetSetting('JSONPathExpression'));
