@@ -87,6 +87,9 @@
 					console.log("Error parsing josn data " + data.value + " : " + e.message);
 				}
 			});
+			if(!data.isApp || data.isApp != "form-builder"){
+        $("#jsonpath_main").css("display","none");
+      }
 		});
 		$(document).ready(function () {
 
